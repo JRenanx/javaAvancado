@@ -26,6 +26,11 @@ public class CampeonatoServiceImpl implements CampeonatoService{
     public Campeonato insert(Campeonato camp) {
         return repository.save(camp);
     }
+    
+    @Override
+    public List<Campeonato> findByYearBetween(Integer start, Integer end){
+        return repository.findByYearBetween(start, end);
+    }
 
     @Override
     public List<Campeonato> listAll() {
@@ -44,5 +49,7 @@ public class CampeonatoServiceImpl implements CampeonatoService{
             repository.delete(camp);
         }
     }
+    
+    
 
 }

@@ -6,3 +6,5 @@
 |_|  \_\___|_| |_|\__,_|_| |_|
   
   
+Powered by Spring Boot ${spring-boot.version}
+

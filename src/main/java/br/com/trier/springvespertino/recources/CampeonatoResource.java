@@ -35,6 +35,12 @@ public class CampeonatoResource {
         return camp != null ? ResponseEntity.ok(camp) : ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/lista/{start}/{end}")
+    public ResponseEntity<List<Campeonato>> findByYearBetween(@PathVariable Integer start,@PathVariable Integer end) {
+        List<Campeonato> camp = service.findByYearBetween(start, end);
+        return camp != null ? ResponseEntity.ok(camp) : ResponseEntity.noContent().build();
+    }
+
     @GetMapping
     public ResponseEntity<List<Campeonato>> listAll() {
         List<Campeonato> lista = service.listAll();

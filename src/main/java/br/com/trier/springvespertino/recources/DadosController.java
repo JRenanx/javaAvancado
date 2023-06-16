@@ -3,7 +3,7 @@ package br.com.trier.springvespertino.recources;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +18,7 @@ public class DadosController {
         this.dadosService = dadosService;
     }
 
-    @PostMapping("/lancaDados")
+    @GetMapping("/lancaDados")
     public ResponseEntity<DadosResultado> launchDice(@RequestParam("numDado") int numDado, @RequestParam("apostaValor") int apostaValor) {
         try {
             DadosResultado result = dadosService.lancaDado(numDado, apostaValor);

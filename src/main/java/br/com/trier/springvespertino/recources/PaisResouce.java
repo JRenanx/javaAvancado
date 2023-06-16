@@ -41,6 +41,12 @@ public class PaisResouce {
         return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
     }
     
+    @GetMapping("/name/{name}")
+    public ResponseEntity<List<Pais>> findByName(@PathVariable String name) {
+        List<Pais> lista = service.findByName(name);
+        return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
+    }
+    
     @PutMapping("/{id}")
     public ResponseEntity<Pais> update(@PathVariable Integer id, @RequestBody Pais pais) {
         pais.setId(id);

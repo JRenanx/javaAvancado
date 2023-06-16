@@ -23,6 +23,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> findByName(String name) {
+        return repository.findByNameStartingWithIgnoreCase(name);
+    }
+
+    @Override
     public User insert(User user) {
         return repository.save(user);
     }

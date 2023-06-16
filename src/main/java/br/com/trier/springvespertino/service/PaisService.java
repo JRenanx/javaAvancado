@@ -8,6 +8,8 @@ public interface PaisService {
 
     Pais findById(Integer id);
     
+    List<Pais> findByName(String name);
+    
     Pais insert (Pais pais);
     
     List<Pais> listAll();
@@ -15,4 +17,6 @@ public interface PaisService {
     Pais update(Pais pais);
     
     void delete(Integer id);
+    
+    
 }

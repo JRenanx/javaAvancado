@@ -21,6 +21,11 @@ public class PaisServiceImpl implements PaisService{
         Optional<Pais> user = repository.findById(id);
         return user.orElse(null);
     }
+    
+    @Override
+    public List<Pais> findByName(String name){
+        return repository.findByNameStartingWithIgnoreCase(name);
+    }
 
     @Override
     public Pais insert(Pais user) {
@@ -44,6 +49,8 @@ public class PaisServiceImpl implements PaisService{
             repository.delete(pais);
         }
     }
+
+    
 
 }
 

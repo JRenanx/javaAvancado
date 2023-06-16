@@ -40,6 +40,12 @@ public class UserResource {
         List<User> lista = service.listAll();
         return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
     }
+    
+    @GetMapping("/name/{name}")
+    public ResponseEntity<List<User>> findByName(@PathVariable String name) {
+        List<User> lista = service.findByName(name);
+        return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<User> update(@PathVariable Integer id, @RequestBody User user) {
@@ -53,5 +59,7 @@ public class UserResource {
         service.delete(id);
         return ResponseEntity.ok().build();
     }
+    
+
 
 }

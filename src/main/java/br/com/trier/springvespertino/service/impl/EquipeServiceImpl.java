@@ -11,17 +11,22 @@ import br.com.trier.springvespertino.repositories.EquipeRepository;
 import br.com.trier.springvespertino.service.EquipeService;
 
 @Repository
-public class EquipeServiceImpl implements EquipeService{
+public class EquipeServiceImpl implements EquipeService {
 
     @Autowired
     private EquipeRepository repository;
-    
+
     @Override
     public Equipe findById(Integer id) {
         Optional<Equipe> equipe = repository.findById(id);
         return equipe.orElse(null);
     }
 
+    @Override
+    public List<Equipe> findByName(String name) {
+        return repository.findByNameStartingWithIgnoreCase(name);
+    }
+    
     @Override
     public Equipe insert(Equipe equipe) {
         return repository.save(equipe);
@@ -42,8 +47,7 @@ public class EquipeServiceImpl implements EquipeService{
         Equipe equipe = findById(id);
         if (equipe != null) {
             repository.delete(equipe);
-        }}
-    
-    
+        }
+    }
 
 }
