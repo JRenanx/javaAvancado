@@ -1,4 +1,4 @@
-package br.com.trier.springvespertino.recources;
+package br.com.trier.springvespertino.resources;
 
 import java.util.List;
 
@@ -36,9 +36,22 @@ public class CampeonatoResource {
     }
 
     @GetMapping("/lista/{start}/{end}")
-    public ResponseEntity<List<Campeonato>> findByYearBetween(@PathVariable Integer start,@PathVariable Integer end) {
+    public ResponseEntity<List<Campeonato>> findByYearBetween(@PathVariable Integer start, @PathVariable Integer end) {
         List<Campeonato> camp = service.findByYearBetween(start, end);
         return camp != null ? ResponseEntity.ok(camp) : ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/ano/{year}")
+    public ResponseEntity<List<Campeonato>> findByYear(@PathVariable Integer year) {
+        List<Campeonato> list = service.findByYear(year);
+        return list.size() > 0 ? ResponseEntity.ok(list) : ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/ano/{start}/{end}/{description}")
+    public ResponseEntity<List<Campeonato>> findByYearAndDescription(@PathVariable Integer start,
+            @PathVariable Integer end, @PathVariable String description) {
+        List<Campeonato> list = service.findByYearAndDescription(start, end, description);
+        return list.size() > 0 ? ResponseEntity.ok(list) : ResponseEntity.noContent().build();
     }
 
     @GetMapping
@@ -59,4 +72,5 @@ public class CampeonatoResource {
         service.delete(id);
         return ResponseEntity.ok().build();
     }
+
 }

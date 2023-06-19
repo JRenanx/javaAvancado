@@ -17,6 +17,8 @@ public interface PaisService {
     Pais update(Pais pais);
     
     void delete(Integer id);
+
+
     
     
 }

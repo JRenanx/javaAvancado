@@ -1,4 +1,4 @@
-package br.com.trier.springvespertino.recources;
+package br.com.trier.springvespertino.resources;
 
 import java.util.List;
 
@@ -53,4 +53,5 @@ public class EquipeResource {
         service.delete(id);
         return ResponseEntity.ok().build();
     }
+    
 }

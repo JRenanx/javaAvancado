@@ -38,8 +38,8 @@ public class EquipeServiceImpl implements EquipeService {
     }
 
     @Override
-    public Equipe update(Equipe user) {
-        return repository.save(user);
+    public Equipe update(Equipe equipe) {
+        return repository.save(equipe);
     }
 
     @Override
@@ -49,5 +49,7 @@ public class EquipeServiceImpl implements EquipeService {
             repository.delete(equipe);
         }
     }
+
+
 
 }

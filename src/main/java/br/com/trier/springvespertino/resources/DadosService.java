@@ -1,4 +1,4 @@
-package br.com.trier.springvespertino.recources;
+package br.com.trier.springvespertino.resources;
 
 import java.util.ArrayList;
 import java.util.List;

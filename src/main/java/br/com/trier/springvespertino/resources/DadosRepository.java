@@ -1,4 +1,4 @@
-package br.com.trier.springvespertino.recources;
+package br.com.trier.springvespertino.resources;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -11,11 +11,11 @@ import br.com.trier.springvespertino.repositories.CampeonatoRepository;
 import br.com.trier.springvespertino.service.CampeonatoService;
 
 @Repository
-public class CampeonatoServiceImpl implements CampeonatoService{
+public class CampeonatoServiceImpl implements CampeonatoService {
 
-   @Autowired
-   CampeonatoRepository repository;
-    
+    @Autowired
+    CampeonatoRepository repository;
+
     @Override
     public Campeonato findById(Integer id) {
         Optional<Campeonato> camp = repository.findById(id);
@@ -26,10 +26,20 @@ public class CampeonatoServiceImpl implements CampeonatoService{
     public Campeonato insert(Campeonato camp) {
         return repository.save(camp);
     }
-    
+
     @Override
-    public List<Campeonato> findByYearBetween(Integer start, Integer end){
+    public List<Campeonato> findByYear(Integer year) {
+        return repository.findByYear(year);
+    }
+
+    @Override
+    public List<Campeonato> findByYearBetween(Integer start, Integer end) {
         return repository.findByYearBetween(start, end);
+    }
+
+    @Override
+    public List<Campeonato> findByYearAndDescription(Integer start, Integer end, String description) {
+        return repository.findByYearBetweenAndDescriptionContainingIgnoreCase(start, end, description);
     }
 
     @Override
@@ -45,11 +55,9 @@ public class CampeonatoServiceImpl implements CampeonatoService{
     @Override
     public void delete(Integer id) {
         Campeonato camp = findById(id);
-        if (camp !=null) {
+        if (camp != null) {
             repository.delete(camp);
         }
     }
-    
-    
 
 }

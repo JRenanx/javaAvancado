@@ -11,4 +11,5 @@ import br.com.trier.springvespertino.models.Equipe;
 public interface EquipeRepository extends JpaRepository<Equipe, Integer> {
 
     List<Equipe> findByNameStartingWithIgnoreCase(String name);
+
 }

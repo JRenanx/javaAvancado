@@ -21,7 +21,7 @@ public class Equipe {
     @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_usuario")
+    @Column(name = "id_equipe")
     private Integer id;
     
     @Column(name = "nome_equipe", unique = true)

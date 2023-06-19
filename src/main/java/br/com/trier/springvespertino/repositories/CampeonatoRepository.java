@@ -10,5 +10,12 @@ import br.com.trier.springvespertino.models.Campeonato;
 @Repository
 public interface CampeonatoRepository  extends JpaRepository<Campeonato, Integer>{
 
+    List<Campeonato> findByYear(Integer year);
+    
     List<Campeonato> findByYearBetween(Integer start, Integer end);
+    
+    List<Campeonato> findByYearBetweenAndDescriptionContainingIgnoreCase(Integer firstYear, Integer lastYear, String description);
+
+
+
 }

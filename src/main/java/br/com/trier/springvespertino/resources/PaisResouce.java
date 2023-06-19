@@ -1,4 +1,4 @@
-package br.com.trier.springvespertino.recources;
+package br.com.trier.springvespertino.resources;
 
 import java.util.List;
 
@@ -22,41 +22,42 @@ public class PaisResouce {
 
     @Autowired
     private PaisService service;
-    
+
     @PostMapping
     public ResponseEntity<Pais> insert(@RequestBody Pais pais) {
         Pais newPais = service.insert(pais);
         return newPais != null ? ResponseEntity.ok(newPais) : ResponseEntity.noContent().build();
     }
-    
+
     @GetMapping("/{id}")
     public ResponseEntity<Pais> findById(@PathVariable Integer id) {
         Pais pais = service.findById(id);
         return pais != null ? ResponseEntity.ok(pais) : ResponseEntity.noContent().build();
     }
-    
+
     @GetMapping
     public ResponseEntity<List<Pais>> listAll() {
         List<Pais> lista = service.listAll();
         return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
     }
-    
-    @GetMapping("/name/{name}")
+
+    @GetMapping("/nome/{name}")
     public ResponseEntity<List<Pais>> findByName(@PathVariable String name) {
         List<Pais> lista = service.findByName(name);
         return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
     }
-    
+
     @PutMapping("/{id}")
     public ResponseEntity<Pais> update(@PathVariable Integer id, @RequestBody Pais pais) {
         pais.setId(id);
         pais = service.update(pais);
         return pais != null ? ResponseEntity.ok(pais) : ResponseEntity.noContent().build();
     }
-    
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         service.delete(id);
         return ResponseEntity.ok().build();
     }
+
 }

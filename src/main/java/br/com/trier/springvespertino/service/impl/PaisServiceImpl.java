@@ -11,7 +11,7 @@ import br.com.trier.springvespertino.repositories.PaisRepository;
 import br.com.trier.springvespertino.service.PaisService;
 
 @Service
-public class PaisServiceImpl implements PaisService{
+public class PaisServiceImpl implements PaisService {
 
     @Autowired
     private PaisRepository repository;
@@ -21,9 +21,9 @@ public class PaisServiceImpl implements PaisService{
         Optional<Pais> user = repository.findById(id);
         return user.orElse(null);
     }
-    
+
     @Override
-    public List<Pais> findByName(String name){
+    public List<Pais> findByName(String name) {
         return repository.findByNameStartingWithIgnoreCase(name);
     }
 
@@ -45,12 +45,9 @@ public class PaisServiceImpl implements PaisService{
     @Override
     public void delete(Integer id) {
         Pais pais = findById(id);
-        if (pais !=null) {
+        if (pais != null) {
             repository.delete(pais);
         }
     }
 
-    
-
 }
-
