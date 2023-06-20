@@ -10,6 +10,6 @@ import br.com.trier.springvespertino.models.Equipe;
 @Repository
 public interface EquipeRepository extends JpaRepository<Equipe, Integer> {
 
-    List<Equipe> findByNameStartingWithIgnoreCase(String name);
+    List<Equipe> findByNameStartsWithIgnoreCase(String name);
 
 }

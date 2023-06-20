@@ -1,5 +1,6 @@
 package br.com.trier.springvespertino.models;
 
+import br.com.trier.springvespertino.models.dto.CampeonatoDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,4 +30,11 @@ public class Campeonato {
     
     @Column(name = "ano_campeonato")
     private Integer year;
+    
+    public Campeonato(CampeonatoDTO dto) {
+        this(dto.getId(), dto.getDescription(), dto.getYear());
+    }
+    public CampeonatoDTO toDTO() {
+        return new CampeonatoDTO(id, description,year);
+    }
 }

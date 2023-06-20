@@ -93,9 +93,9 @@ public class PaisServiceTest extends BaseTests {
     @DisplayName("Procura por nome")
     @Sql({ "classpath:/resources/sqls/pais.sql" })
     void findByCountryTest() {
-        assertEquals(1, service.findByName("br").size());
-        assertEquals(1, service.findByName("eu").size());
-        assertEquals(1, service.findByName("it").size());
+        assertEquals(1, service.findByNameStartsWithIgnoreCase("br").size());
+        assertEquals(1, service.findByNameStartsWithIgnoreCase("eu").size());
+        assertEquals(1, service.findByNameStartsWithIgnoreCase("it").size());
     }
 
 }

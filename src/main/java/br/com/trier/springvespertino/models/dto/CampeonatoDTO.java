@@ -1,21 +1,15 @@
 package br.com.trier.springvespertino.models.dto;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class ApostaDTO {
+public class CampeonatoDTO {
 
-    private List<Integer> dice;
-    private Integer sum;
-    private Double percent;
-    private String message;
-    
-    
+    private Integer id;
+    private String Description;
+    private Integer Year;
 }

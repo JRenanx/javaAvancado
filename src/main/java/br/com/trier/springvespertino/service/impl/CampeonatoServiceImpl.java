@@ -1,5 +1,6 @@
 package br.com.trier.springvespertino.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,12 +10,22 @@ import org.springframework.stereotype.Repository;
 import br.com.trier.springvespertino.models.Campeonato;
 import br.com.trier.springvespertino.repositories.CampeonatoRepository;
 import br.com.trier.springvespertino.service.CampeonatoService;
+import br.com.trier.springvespertino.service.exception.IntegrityViolation;
 
 @Repository
 public class CampeonatoServiceImpl implements CampeonatoService {
 
     @Autowired
     CampeonatoRepository repository;
+
+    private void validYear(Campeonato camp) {
+        if (camp.getYear() == null) {
+            throw new IntegrityViolation("Ano não pode ser null");
+        }
+        if (camp.getYear() < 1990 || camp.getYear() > LocalDateTime.now().getYear() + 1) {
+            throw new IntegrityViolation("Ano inválido: %s".formatted(camp.getYear()));
+        }
+    }
 
     @Override
     public Campeonato findById(Integer id) {
@@ -24,6 +35,7 @@ public class CampeonatoServiceImpl implements CampeonatoService {
 
     @Override
     public Campeonato insert(Campeonato camp) {
+        validYear(camp);
         return repository.save(camp);
     }
 
@@ -49,6 +61,7 @@ public class CampeonatoServiceImpl implements CampeonatoService {
 
     @Override
     public Campeonato update(Campeonato camp) {
+        validYear(camp);
         return repository.save(camp);
     }
 

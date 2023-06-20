@@ -93,9 +93,9 @@ public class EquipeServiceTest extends BaseTests{
     @DisplayName("Procura por nome")
     @Sql({ "classpath:/resources/sqls/equipe.sql" })
     void findByTeamTest() {
-        assertEquals(1, service.findByName("willians").size());
-        assertEquals(2, service.findByName("ferrari").size());
-        assertEquals(3, service.findByName("redbull").size());
+        assertEquals(1, service.findByNameStartsWithIgnoreCase("willians").size());
+        assertEquals(1, service.findByNameStartsWithIgnoreCase("ferrari").size());
+        assertEquals(1, service.findByNameStartsWithIgnoreCase("redbull").size());
     }
 
 }

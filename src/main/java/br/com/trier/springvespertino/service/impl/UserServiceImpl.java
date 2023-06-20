@@ -17,11 +17,11 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository repository;
-    
-    private void findByEmail (User user) {
+
+    private void findByEmail(User user) {
         User busca = repository.findByEmail(user.getEmail());
-        if(busca != null && busca.getId() != user.getId()) {
-            throw new IntegrityViolation("Email já existente: %s".formatted(user.getEmail()));
+        if (busca != null && !busca.getId().equals(user.getId())) {
+            throw new IntegrityViolation("Email já existente: %s".formatted(user.getEmail()));           
         }
     }
 
@@ -32,10 +32,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findByName(String name) {
-        List<User> lista = repository.findByNameStartingWithIgnoreCase(name);
-        if(lista.isEmpty()) {
-            throw new ObjectNotFound("O usuário %s não existe.".formatted(name));
+    public List<User> findByNameStartsWithIgnoreCase(String name) {
+        List<User> lista = repository.findByNameStartsWithIgnoreCase(name);
+        if (lista.isEmpty()) {
+            throw new ObjectNotFound("Nenhum usário inicia com %s".formatted(name));
         }
         return lista;
     }
@@ -49,8 +49,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> listAll() {
         List<User> lista = repository.findAll();
-        if(lista.isEmpty()) {
-            throw new ObjectNotFound("Nenhum usuario cadastrado");
+        if (lista.isEmpty()) {
+            throw new ObjectNotFound("Nenhum usuário cadastrado");
         }
         return lista;
     }

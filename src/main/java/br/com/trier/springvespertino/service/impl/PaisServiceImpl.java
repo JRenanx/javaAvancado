@@ -23,8 +23,8 @@ public class PaisServiceImpl implements PaisService {
     }
 
     @Override
-    public List<Pais> findByName(String name) {
-        return repository.findByNameStartingWithIgnoreCase(name);
+    public List<Pais> findByNameStartsWithIgnoreCase(String name) {
+        return repository.findByNameStartsWithIgnoreCase(name);
     }
 
     @Override

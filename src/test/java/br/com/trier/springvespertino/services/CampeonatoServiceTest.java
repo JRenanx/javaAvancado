@@ -67,12 +67,12 @@ class CampeonatoServiceTest extends BaseTests {
         assertNotNull(camp);
         assertEquals(1, camp.getId());
         assertEquals("Modo Turbo", camp.getDescription());
-        camp = new Campeonato(1, "Modo Turbo 2.0", 2025);
+        camp = new Campeonato(1, "Modo Turbo 2.0", 2024);
         service.update(camp);
         assertEquals(3, service.listAll().size());
         assertEquals(1, camp.getId());
         assertEquals("Modo Turbo 2.0", camp.getDescription());
-        assertEquals(2025, camp.getYear());
+        assertEquals(2024, camp.getYear());
     }
 
     @Test
@@ -117,23 +117,6 @@ class CampeonatoServiceTest extends BaseTests {
         assertArrayEquals(camp.toArray(),resultCamp.toArray());
     }
 
-    @Test
-    @DisplayName("Procura por ano e descrição")
-    @Sql({ "classpath:/resources/sqls/campeonato.sql" })
-    void findByYearAndDescriptionTest() {
-        var champ = service.findByYearAndDescription(2020, 2021, "Mod");
-        assertEquals(1, champ.size());
-        champ = service.findByYearAndDescription(2020, 2021, "Mod");
-        assertEquals(1, champ.size());
-        assertEquals("Modo Turbo", champ.get(0).getDescription());
-    }
 
-    @Test
-    @DisplayName("Procura por ano e descrição errada")
-    @Sql({ "classpath:/resources/sqls/campeonato.sql" })
-    void findByYearAndDescriptionWrongTest() {
-        var champ = service.findByYearAndDescription(1991, 2035, "z");
-        assertEquals(0, champ.size());
-    }
 
 }

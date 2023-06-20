@@ -23,8 +23,8 @@ public class EquipeServiceImpl implements EquipeService {
     }
 
     @Override
-    public List<Equipe> findByName(String name) {
-        return repository.findByNameStartingWithIgnoreCase(name);
+    public List<Equipe> findByNameStartsWithIgnoreCase(String name) {
+        return repository.findByNameStartsWithIgnoreCase(name);
     }
     
     @Override

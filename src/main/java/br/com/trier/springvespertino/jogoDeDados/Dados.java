@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import br.com.trier.springvespertino.models.dto.ApostaDto;
+import br.com.trier.springvespertino.models.dto.ApostaDTO;
 
 @RequestMapping("/dados")
 public class Dados {

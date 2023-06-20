@@ -8,9 +8,8 @@ import org.springframework.stereotype.Repository;
 import br.com.trier.springvespertino.models.Pais;
 
 @Repository
-public interface PaisRepository  extends JpaRepository<Pais, Integer>{
-    
-    List<Pais> findByNameStartingWithIgnoreCase(String name);
+public interface PaisRepository extends JpaRepository<Pais, Integer> {
 
+    List<Pais> findByNameStartsWithIgnoreCase(String name);
 
 }

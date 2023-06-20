@@ -1,5 +1,6 @@
 package br.com.trier.springvespertino.models;
 
+import br.com.trier.springvespertino.models.dto.PaisDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,4 +27,12 @@ public class Pais {
     
     @Column(name = "nome_pais", unique = true)
     private String name;
+    
+    public Pais(PaisDTO dto) {
+        this(dto.getId(), dto.getName());
+    }
+    
+    public PaisDTO toDTO() {
+        return new PaisDTO(id, name);
+    }
 }

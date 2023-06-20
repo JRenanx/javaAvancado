@@ -10,7 +10,7 @@ public interface EquipeService {
 
     List<Equipe> listAll();
 
-    List<Equipe> findByName(String name);
+    List<Equipe> findByNameStartsWithIgnoreCase(String name);
 
     Equipe insert(Equipe equipe);
 
