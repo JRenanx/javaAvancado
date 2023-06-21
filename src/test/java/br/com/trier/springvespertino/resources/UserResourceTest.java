@@ -49,8 +49,8 @@ public class UserResourceTest {
     @Test
     @Sql({ "classpath:/resources/sqls/limpa_tabelas.sql" })
     @Sql({ "classpath:/resources/sqls/usuario.sql" })
-    @DisplayName("Buscar por id")
-    public void getOkTest() {
+    @DisplayName("Teste cuscar por id")
+    public void getIdTest() {
         ResponseEntity<UserDTO> response = getUser("/usuarios/1");
         assertEquals(response.getStatusCode(), HttpStatus.OK);
         UserDTO user = response.getBody();
@@ -60,14 +60,14 @@ public class UserResourceTest {
     @Test
     @Sql({ "classpath:/resources/sqls/limpa_tabelas.sql" })
     @Sql({ "classpath:/resources/sqls/usuario.sql" })
-    @DisplayName("Buscar por id inexistente")
+    @DisplayName("Test buscar por id inexistente")
     public void getNotFoundTest() {
         ResponseEntity<UserDTO> response = getUser("/usuarios/100");
         assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
     }
 
     @Test
-    @DisplayName("Cadastrar usuário")
+    @DisplayName("Test cadastrar usuário")
     @Sql({ "classpath:/resources/sqls/limpa_tabelas.sql" })
     public void createUserTest() {
         UserDTO dto = new UserDTO(null, "nome", "email", "senha");
@@ -82,7 +82,7 @@ public class UserResourceTest {
     }
 
     @Test
-    @DisplayName("Deleta usuário")
+    @DisplayName("Test deleta usuário")
     @Sql({ "classpath:/resources/sqls/limpa_tabelas.sql" })
     @Sql({ "classpath:/resources/sqls/usuario.sql" })
     public void deleteUserTest() {
@@ -96,7 +96,7 @@ public class UserResourceTest {
     }
 
     @Test
-    @DisplayName("Deleta usuário inexistente")
+    @DisplayName("Test deleta usuário inexistente")
     @Sql({ "classpath:/resources/sqls/limpa_tabelas.sql" })
     public void deleteUserNonExistTest() {
         ResponseEntity<UserDTO> response = getUser("/usuarios/100");
@@ -114,7 +114,7 @@ public class UserResourceTest {
     }
 
     @Test
-    @DisplayName("Teste Listar todos")
+    @DisplayName("Teste atualiza usuario")
     @Sql({ "classpath:/resources/sqls/limpa_tabelas.sql" })
     @Sql({ "classpath:/resources/sqls/usuario.sql" })
     public void updateTest() {

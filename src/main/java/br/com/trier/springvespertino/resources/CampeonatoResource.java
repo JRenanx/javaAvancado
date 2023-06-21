@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.trier.springvespertino.models.Campeonato;
+import br.com.trier.springvespertino.models.dto.CampeonatoDTO;
 import br.com.trier.springvespertino.service.CampeonatoService;
 
 @RestController
@@ -24,47 +25,40 @@ public class CampeonatoResource {
     private CampeonatoService service;
 
     @PostMapping
-    public ResponseEntity<Campeonato> insert(@RequestBody Campeonato camp) {
-        Campeonato newCamp = service.insert(camp);
-        return newCamp != null ? ResponseEntity.ok(newCamp) : ResponseEntity.noContent().build();
+    public ResponseEntity<CampeonatoDTO> insert(@RequestBody CampeonatoDTO camp) {
+        return ResponseEntity.ok(service.insert(new Campeonato(camp)).toDTO());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Campeonato> findById(@PathVariable Integer id) {
+    public ResponseEntity<CampeonatoDTO> findById(@PathVariable Integer id) {
         Campeonato camp = service.findById(id);
-        return camp != null ? ResponseEntity.ok(camp) : ResponseEntity.noContent().build();
+        return ResponseEntity.ok(camp.toDTO()) ;
     }
 
     @GetMapping("/lista/{start}/{end}")
-    public ResponseEntity<List<Campeonato>> findByYearBetween(@PathVariable Integer start, @PathVariable Integer end) {
-        List<Campeonato> camp = service.findByYearBetween(start, end);
-        return camp != null ? ResponseEntity.ok(camp) : ResponseEntity.noContent().build();
+    public ResponseEntity<List<CampeonatoDTO>> findByYearBetween(@PathVariable Integer start, @PathVariable Integer end) {
+        return ResponseEntity.ok(service.findByYearBetween(start, end).stream().map((campeonato) -> campeonato.toDTO()).toList());
     }
 
     @GetMapping("/ano/{year}")
-    public ResponseEntity<List<Campeonato>> findByYear(@PathVariable Integer year) {
-        List<Campeonato> list = service.findByYear(year);
-        return list.size() > 0 ? ResponseEntity.ok(list) : ResponseEntity.noContent().build();
+    public ResponseEntity<List<CampeonatoDTO>> findByYear(@PathVariable Integer year) {
+        return ResponseEntity.ok(service.findByYear(year).stream().map((campeonato) -> campeonato.toDTO()).toList());
     }
 
     @GetMapping("/ano/{start}/{end}/{description}")
-    public ResponseEntity<List<Campeonato>> findByYearAndDescription(@PathVariable Integer start,
-            @PathVariable Integer end, @PathVariable String description) {
-        List<Campeonato> list = service.findByYearAndDescription(start, end, description);
-        return list.size() > 0 ? ResponseEntity.ok(list) : ResponseEntity.noContent().build();
+    public ResponseEntity<List<CampeonatoDTO>> findByYearAndDescription(@PathVariable Integer start,@PathVariable Integer end, @PathVariable String description) {
+        return ResponseEntity.ok(service.findByYearAndDescription(start, end, description).stream().map((campeonato) -> campeonato.toDTO()).toList());
     }
 
     @GetMapping
-    public ResponseEntity<List<Campeonato>> listAll() {
-        List<Campeonato> lista = service.listAll();
-        return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
+    public ResponseEntity<List<CampeonatoDTO>> listAll() {
+        return ResponseEntity.ok(service.listAll().stream().map((campeonato) -> campeonato.toDTO()).toList());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Campeonato> update(@PathVariable Integer id, @RequestBody Campeonato camp) {
+    public ResponseEntity<CampeonatoDTO> update(@PathVariable Integer id, @RequestBody Campeonato camp) {
         camp.setId(id);
-        camp = service.update(camp);
-        return camp != null ? ResponseEntity.ok(camp) : ResponseEntity.noContent().build();
+        return ResponseEntity.ok(service.update(camp).toDTO());
     }
 
     @DeleteMapping("/{id}")
