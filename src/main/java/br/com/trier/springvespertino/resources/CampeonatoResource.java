@@ -18,7 +18,7 @@ import br.com.trier.springvespertino.models.dto.CampeonatoDTO;
 import br.com.trier.springvespertino.service.CampeonatoService;
 
 @RestController
-@RequestMapping("/campeonato")
+@RequestMapping("/campeonatos")
 public class CampeonatoResource {
 
     @Autowired

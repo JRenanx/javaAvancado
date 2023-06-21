@@ -46,8 +46,8 @@ public class EquipeResource {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EquipeDTO> update(@PathVariable Integer id, @RequestBody EquipeDTO equipeDTO) {
-        Equipe equipe = new Equipe(equipeDTO);
+    public ResponseEntity<EquipeDTO> update (@PathVariable Integer id, @RequestBody EquipeDTO equipeDTO) {
+        Equipe equipe = new Equipe (equipeDTO);
         equipe.setId(id);
         return ResponseEntity.ok(service.update(equipe).toDTO());
     }

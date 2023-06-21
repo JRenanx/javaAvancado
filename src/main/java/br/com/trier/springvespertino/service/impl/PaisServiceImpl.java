@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import br.com.trier.springvespertino.models.Pais;
 import br.com.trier.springvespertino.repositories.PaisRepository;
 import br.com.trier.springvespertino.service.PaisService;
+import br.com.trier.springvespertino.service.exception.ObjectNotFound;
 
 @Service
 public class PaisServiceImpl implements PaisService {
@@ -19,7 +20,7 @@ public class PaisServiceImpl implements PaisService {
     @Override
     public Pais findById(Integer id) {
         Optional<Pais> user = repository.findById(id);
-        return user.orElse(null);
+        return user.orElseThrow(() -> new ObjectNotFound("Pais %s não encontrado".formatted(id)));
     }
 
     @Override

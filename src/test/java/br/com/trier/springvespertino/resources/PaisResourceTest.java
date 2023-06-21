@@ -8,22 +8,21 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
-import br.com.trier.springvespertino.models.dto.UserDTO;
+import br.com.trier.springvespertino.models.dto.PaisDTO;
 
 public class PaisResourceTest {
 
     @Autowired
     protected TestRestTemplate rest;
 
-    private ResponseEntity<UserDTO> getUser(String url) {
-        return rest.getForEntity(url, UserDTO.class);
+    private ResponseEntity<PaisDTO> getPais(String url) {
+        return rest.getForEntity(url, PaisDTO.class);
     }
 
     @SuppressWarnings("unused")
-    private ResponseEntity<List<UserDTO>> getUsers(String url) {
-        return rest.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<UserDTO>>() {
+    private ResponseEntity<List<PaisDTO>> getPaises(String url) {
+        return rest.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<PaisDTO>>() {
         });
     }
-
 
 }

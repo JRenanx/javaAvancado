@@ -20,6 +20,7 @@ import jakarta.transaction.Transactional;
 
 @Transactional
 class UserServiceTest extends BaseTests {
+    
     @Autowired
     UserService userService;
 
