@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import br.com.trier.springvespertino.models.Corrida;
 import br.com.trier.springvespertino.repositories.CorridaRepository;
 import br.com.trier.springvespertino.service.CorridaService;
+import br.com.trier.springvespertino.service.exception.IntegrityViolation;
 import br.com.trier.springvespertino.service.exception.ObjectNotFound;
 
 @Service
@@ -17,20 +18,28 @@ public class CorridaServiceImpl implements CorridaService {
     @Autowired
     private CorridaRepository repository;
 
-    private void validateDate(Corrida corrida) {
-        if (corrida.getDate().getYear() == corrida.getCampeonato().getYear()) {
-            throw new ObjectNotFound("data da corrida precisa ser no mesmo ano que do campeonato");
+    private void validateRace(Corrida corrida) {
+        if (corrida.getCampeonato() == null) {
+            throw new IntegrityViolation("Campeonato nao pode ser nulo.");
+        }
+        if (corrida.getDate() == null) {
+            throw new IntegrityViolation("Data invalida.");
+        }
+        int campeonatoAno = corrida.getCampeonato().getYear();
+        int corridaAno = corrida.getDate().getYear();
+        if (campeonatoAno != corridaAno) {
+            throw new IntegrityViolation("Ano da corrida diferente do ano do campeonato.");
         }
     }
 
     @Override
     public Corrida findById(Integer id) {
-        return repository.findById(id).orElseThrow(() -> new ObjectNotFound("corrida %s não encontrada"));
+        return repository.findById(id).orElseThrow(() -> new ObjectNotFound("Corrida %s não encontrada.".formatted(id)));
     }
 
     @Override
     public Corrida insert(Corrida corrida) {
-        validateDate(corrida);
+        validateRace(corrida);
         return repository.save(corrida);
     }
 
@@ -38,7 +47,7 @@ public class CorridaServiceImpl implements CorridaService {
     public List<Corrida> listAll() {
         List<Corrida> lista = repository.findAll();
         if (lista.isEmpty()) {
-            throw new ObjectNotFound("nenhuma corrida cadastrada");
+            throw new ObjectNotFound("Nenhuma corrida cadastrada.");
         }
         return lista;
     }
@@ -46,7 +55,7 @@ public class CorridaServiceImpl implements CorridaService {
     @Override
     public Corrida update(Corrida corrida) {
         findById(corrida.getId());
-        validateDate(corrida);
+        validateRace(corrida);
         return repository.save(corrida);
     }
 
@@ -60,7 +69,8 @@ public class CorridaServiceImpl implements CorridaService {
     public List<Corrida> findByDateBetween(ZonedDateTime dateIn, ZonedDateTime dateFin) {
         List<Corrida> lista = repository.findByDateBetween(dateIn, dateFin);
         if (lista.isEmpty()) {
-            throw new ObjectNotFound("nenhuma corrida cadastrada");
+            throw new ObjectNotFound("Nenhuma corrida cadastrada.");
         }
         return lista;
     }
+}

@@ -36,5 +36,6 @@ public class Corrida {
     @ManyToOne
     private Campeonato campeonato;
         
+   
     
 }

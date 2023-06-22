@@ -11,14 +11,14 @@ import br.com.trier.springvespertino.service.PilotoService;
 import br.com.trier.springvespertino.service.exception.ObjectNotFound;
 
 @Service
-public class PilotoServiceImpl implements PilotoService{
+public class PilotoServiceImpl implements PilotoService {
 
     @Autowired
     private PilotoRepository repository;
 
     @Override
     public Piloto findById(Integer id) {
-        return repository.findById(id).orElseThrow(() -> new ObjectNotFound("piloto %s nao encontrado"));
+        return repository.findById(id).orElseThrow(() -> new ObjectNotFound("Piloto %s nao encontrado.".formatted(id)));
     }
 
     @Override
@@ -30,7 +30,7 @@ public class PilotoServiceImpl implements PilotoService{
     public List<Piloto> listAll() {
         List<Piloto> lista = repository.findAll();
         if (lista.isEmpty()) {
-            throw  new ObjectNotFound( "nenhuma pista cadastrada");
+            throw new ObjectNotFound("Nenhum piloto cadastrado.");
         }
         return lista;
     }
@@ -51,19 +51,18 @@ public class PilotoServiceImpl implements PilotoService{
     public List<Piloto> findByNameContainingIgnoreCase(String name) {
         List<Piloto> lista = repository.findByNameContainingIgnoreCase(name);
         if (lista.isEmpty()) {
-            throw  new ObjectNotFound( "nenhuma pista cadastrada");
+            throw new ObjectNotFound("Nenhum piloto com esse nome.");
         }
         return lista;
     }
 
     @Override
-    public List<Piloto> findByNameStartingWithIgnoreCase(String name) {
-        List<Piloto> lista = repository.findByNameStartingWithIgnoreCase(name);
+    public List<Piloto> findByNameStartsWithIgnoreCase(String name) {
+        List<Piloto> lista = repository.findByNameStartsWithIgnoreCase(name);
         if (lista.isEmpty()) {
-            throw  new ObjectNotFound( "nenhuma pista cadastrada");
+            throw new ObjectNotFound("Nenhum piloto com esse nome.");
         }
         return lista;
     }
-    
-    
+
 }

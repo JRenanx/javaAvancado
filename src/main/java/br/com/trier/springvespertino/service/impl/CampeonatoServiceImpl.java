@@ -20,7 +20,7 @@ public class CampeonatoServiceImpl implements CampeonatoService {
 
     private void validYear(Campeonato camp) {
         if (camp.getYear() == null) {
-            throw new IntegrityViolation("Ano não pode ser null");
+            throw new IntegrityViolation("Ano não pode ser nulo");
         }
         if (camp.getYear() < 1990 || camp.getYear() > LocalDateTime.now().getYear() + 1) {
             throw new IntegrityViolation("Ano inválido: %s".formatted(camp.getYear()));

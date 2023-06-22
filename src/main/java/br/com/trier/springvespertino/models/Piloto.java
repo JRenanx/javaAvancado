@@ -1,5 +1,6 @@
 package br.com.trier.springvespertino.models;
 
+import br.com.trier.springvespertino.models.dto.PilotoDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,4 +34,12 @@ public class Piloto {
     
     @ManyToOne
     private Equipe equipe;
+    
+    public Piloto(PilotoDTO dto, Pais pais, Equipe equipe) {
+        this(dto.getId(), dto.getName(), pais, equipe);
+    }
+    
+    public PilotoDTO toDto() {
+        return new PilotoDTO(id, name, pais.getId(), pais.getName(), equipe.getId(), equipe.getName());
+    }   
 }

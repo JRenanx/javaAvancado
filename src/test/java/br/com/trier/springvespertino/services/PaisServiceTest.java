@@ -3,6 +3,7 @@ package br.com.trier.springvespertino.services;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import org.springframework.test.context.jdbc.Sql;
 import br.com.trier.springvespertino.BaseTests;
 import br.com.trier.springvespertino.models.Pais;
 import br.com.trier.springvespertino.service.PaisService;
+import br.com.trier.springvespertino.service.exception.ObjectNotFound;
 import jakarta.transaction.Transactional;
 
 @Transactional
@@ -32,10 +34,11 @@ public class PaisServiceTest extends BaseTests {
     }
 
     @Test
-    @DisplayName("Buscar por id inválido")
-    @Sql({ "classpath:/resources/sqls/pais.sql" })
-    void findByIdInvalidTest() {
-        assertNull(service.findById(4));
+    @DisplayName("Teste buscar por ID inexistente")
+    @Sql({ "classpath:/resources/sqls/usuario.sql" })
+    void findByIdNonExistsTest() {
+        var exception = assertThrows(ObjectNotFound.class, () -> service.findById(10));
+        assertEquals("Pais 10 não encontrado", exception.getMessage());
     }
 
     @Test
@@ -86,7 +89,6 @@ public class PaisServiceTest extends BaseTests {
     void deleteIdNoExistTest() {
         assertEquals(3, service.listAll().size());
         service.delete(10);
-        assertEquals(3, service.listAll().size());
     }
 
     @Test

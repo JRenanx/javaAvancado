@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,8 @@ import org.springframework.test.context.jdbc.Sql;
 import br.com.trier.springvespertino.BaseTests;
 import br.com.trier.springvespertino.models.Campeonato;
 import br.com.trier.springvespertino.service.CampeonatoService;
+import br.com.trier.springvespertino.service.exception.IntegrityViolation;
+import br.com.trier.springvespertino.service.exception.ObjectNotFound;
 import jakarta.transaction.Transactional;
 
 @Transactional
@@ -116,6 +119,37 @@ class CampeonatoServiceTest extends BaseTests {
         assertEquals(resultCamp.size(), camp.size());
         assertArrayEquals(camp.toArray(),resultCamp.toArray());
     }
+    
+    @Test
+    @DisplayName("Procura por ano e descrição errada")
+    @Sql({"classpath:/resources/sqls/campeonato.sql"})
+    void findByYearAndDescriptionWrongTest() {
+        var exception = assertThrows(ObjectNotFound.class, () -> service.findByYearAndDescription(1990, 2005, "z"));
+        assertEquals("Campeonato não encontrado.", exception.getMessage());
+    }
+    @Test
+    @DisplayName("Update campeonato passando ano inválido")
+    @Sql({"classpath:/resources/sqls/campeonato.sql"})
+    void updateInvalidYearTest() { 
+        Campeonato camp = service.findById(1);
+        assertNotNull(camp);
+        assertEquals(1, camp.getId());
+        assertEquals("Modo Turbo", camp.getDescription());  
+        var campAltera = new Campeonato(1, "Modo Turbo 2", 2030);
+        var exception = assertThrows(IntegrityViolation.class, () -> 
+        service.update(campAltera));
+        assertEquals("Ano inválido: 2030", exception.getMessage());  
+    }
+    
+    @Test
+    @DisplayName("insere com ano do campeonato nulo")
+    @Sql({"classpath:/resources/sqls/campeonato.sql"})
+    void insertChampionshipWithNullYearTest() {
+        Campeonato camp = new Campeonato(null, "insert", null);
+        var exception = assertThrows(IntegrityViolation.class, () -> service.insert(camp));
+        assertEquals("Ano não pode ser nulo", exception.getMessage());
+    }
+    
 
 
 
