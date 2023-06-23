@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.trier.springvespertino.models.Equipe;
+import br.com.trier.springvespertino.models.Pais;
 import br.com.trier.springvespertino.models.Piloto;
 import br.com.trier.springvespertino.repositories.PilotoRepository;
 import br.com.trier.springvespertino.service.PilotoService;
@@ -27,15 +29,6 @@ public class PilotoServiceImpl implements PilotoService {
     }
 
     @Override
-    public List<Piloto> listAll() {
-        List<Piloto> lista = repository.findAll();
-        if (lista.isEmpty()) {
-            throw new ObjectNotFound("Nenhum piloto cadastrado.");
-        }
-        return lista;
-    }
-
-    @Override
     public Piloto update(Piloto piloto) {
         findById(piloto.getId());
         return repository.save(piloto);
@@ -48,10 +41,10 @@ public class PilotoServiceImpl implements PilotoService {
     }
 
     @Override
-    public List<Piloto> findByNameContainingIgnoreCase(String name) {
-        List<Piloto> lista = repository.findByNameContainingIgnoreCase(name);
+    public List<Piloto> listAll() {
+        List<Piloto> lista = repository.findAll();
         if (lista.isEmpty()) {
-            throw new ObjectNotFound("Nenhum piloto com esse nome.");
+            throw new ObjectNotFound("Nenhum piloto cadastrado.");
         }
         return lista;
     }
@@ -61,6 +54,24 @@ public class PilotoServiceImpl implements PilotoService {
         List<Piloto> lista = repository.findByNameStartsWithIgnoreCase(name);
         if (lista.isEmpty()) {
             throw new ObjectNotFound("Nenhum piloto com esse nome.");
+        }
+        return lista;
+    }
+
+    @Override
+    public List<Piloto> findByPaisOrderByName(Pais pais) {
+        List<Piloto> lista = repository.findByPaisOrderByName(pais);
+        if (lista.isEmpty()) {
+            throw new ObjectNotFound("Nenhum piloto cadastrado no país: %s".formatted(pais.getName()));
+        }
+        return lista;
+    }
+
+    @Override
+    public List<Piloto> findByEquipeOrderByName(Equipe equipe) {
+        List<Piloto> lista = repository.findByEquipeOrderByName(equipe);
+        if (lista.isEmpty()) {
+            throw new ObjectNotFound("Nenhum piloto cadastrado na equipe: %s".formatted(equipe.getName()));
         }
         return lista;
     }

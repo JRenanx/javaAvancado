@@ -20,7 +20,7 @@ public class PistaServiceImpl implements PistaService {
 
     private void validatePista(Pista pista) {
         if (pista.getSize() == null || pista.getSize() <= 0) {
-            throw new IntegrityViolation("Tamanho da pista invalido");
+            throw new IntegrityViolation("Tamanho da pista inválido.");
         }
     }
 
@@ -33,15 +33,6 @@ public class PistaServiceImpl implements PistaService {
     public Pista insert(Pista pista) {
         validatePista(pista);
         return repository.save(pista);
-    }
-
-    @Override
-    public List<Pista> listAll() {
-        List<Pista> lista = repository.findAll();
-        if(lista.isEmpty()) {
-            throw new ObjectNotFound("Nenhuma pista cadastrada.");
-        }
-        return lista;
     }
 
     @Override
@@ -58,10 +49,28 @@ public class PistaServiceImpl implements PistaService {
     }
 
     @Override
+    public List<Pista> findByPaisOrderBySizeDesc(Pais pais) {
+        List<Pista> lista = repository.findByPaisOrderBySizeDesc(pais);
+        if (lista.isEmpty()) {
+            throw new ObjectNotFound("Nenhuma pista cadastrada no país: %s".formatted(pais.getName()));
+        }
+        return lista;
+    }
+
+    @Override
     public List<Pista> findByNameStartsWithIgnoreCase(String name) {
         List<Pista> lista = repository.findByNameStartsWithIgnoreCase(name);
-        if(lista.isEmpty()) {
+        if (lista.isEmpty()) {
             throw new ObjectNotFound("Nenhuma pista cadastrada com esse nome.");
+        }
+        return lista;
+    }
+
+    @Override
+    public List<Pista> listAll() {
+        List<Pista> lista = repository.findAll();
+        if (lista.isEmpty()) {
+            throw new ObjectNotFound("Nenhuma pista cadastrada.");
         }
         return lista;
     }
@@ -69,23 +78,10 @@ public class PistaServiceImpl implements PistaService {
     @Override
     public List<Pista> findBySizeBetween(Integer sizeIn, Integer sizeFinal) {
         List<Pista> lista = repository.findBySizeBetween(sizeIn, sizeFinal);
-        if(lista.isEmpty()) {
+        if (lista.isEmpty()) {
             throw new ObjectNotFound("Nenhuma pista cadastrada com essas medidas.");
         }
         return lista;
     }
-
-    @Override
-    public List<Pista> findByPaisOrderBySizeDesc(Pais pais) {
-        List<Pista> lista = repository.findByPaisOrderBySizeDesc(pais);
-        if(lista.isEmpty()) {
-            throw new ObjectNotFound("Nenhuma pista cadastrada neste pais: %s".formatted(pais.getName()));
-        }
-        return lista;
-    }
-    
-    
-    
-    
 
 }

@@ -1,18 +1,18 @@
 package br.com.trier.springvespertino.services;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 
 import br.com.trier.springvespertino.BaseTests;
 import br.com.trier.springvespertino.models.Campeonato;
@@ -22,14 +22,14 @@ import br.com.trier.springvespertino.service.exception.ObjectNotFound;
 import jakarta.transaction.Transactional;
 
 @Transactional
+@Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:/resources/sqls/campeonato.sql")
 class CampeonatoServiceTest extends BaseTests {
 
     @Autowired
     CampeonatoService service;
 
     @Test
-    @DisplayName("Buscar por id")
-    @Sql({ "classpath:/resources/sqls/campeonato.sql" })
+    @DisplayName("Teste buscar por id")
     void findByIdTest() {
         Campeonato camp = service.findById(1);
         assertNotNull(camp);
@@ -39,32 +39,53 @@ class CampeonatoServiceTest extends BaseTests {
     }
 
     @Test
-    @DisplayName("Buscar por id inválido")
-    @Sql({ "classpath:/resources/sqls/campeonato.sql" })
+    @DisplayName("Teste buscar por id invalido")
     void findByIdInvalidTest() {
         assertNull(service.findById(25));
     }
 
     @Test
-    @DisplayName("Buscar tudo")
-    @Sql({ "classpath:/resources/sqls/campeonato.sql" })
-    void listAllTest() {
-        assertEquals(3, service.listAll().size());
+    @DisplayName("Teste listar todos")
+    void listAllCampeonatoTest() {
+        List<Campeonato> lista = service.listAll();
+        assertEquals(3, lista.size());
+    }
+    
+    @Test
+    @DisplayName("Teste listar todos sem cadastro")
+    void listAllNoCampeonatoTest() {
+        List<Campeonato> lista = service.listAll();
+        assertEquals(3, lista.size());
+        service.delete(1);
+        service.delete(2);
+        service.delete(3);
+        var exception = assertThrows(ObjectNotFound.class, () -> service.listAll());
+        assertEquals("Nenhum campeonato cadastrado.", exception.getMessage());
     }
 
     @Test
-    @DisplayName("Inserir novo campeonato")
-    void insertTest() {
-        Campeonato camp = new Campeonato(null, "Campeonato", 2024);
+    @DisplayName("Teste inserir campeonato")
+    @Sql({"classpath:/resources/sqls/limpa_tabelas.sql"})
+    void insertCampeonatoTest() {
+        Campeonato camp = new Campeonato(null, "insert", 2005);
         service.insert(camp);
         assertEquals(1, service.listAll().size());
         assertEquals(1, camp.getId());
-        assertEquals("Campeonato", camp.getDescription());
+        assertEquals("insert", camp.getDescription());
+        assertEquals(2005, camp.getYear());
     }
-
+    
     @Test
-    @DisplayName("Atualizar campeonato")
-    @Sql({ "classpath:/resources/sqls/campeonato.sql" })
+    @DisplayName("Teste inserir campeonato < 1990")
+    void insertCampeonatoInvalidYearTest() {
+        Campeonato camp = new Campeonato (null, "insert", 1985);
+        var exception = assertThrows(IntegrityViolation.class, () -> service.insert(camp));
+        assertEquals("Ano inválido.", exception.getMessage()); 
+    }
+    
+    
+    @Test
+    @DisplayName("Teste atualizar campeonato")
     void updateTest() {
         Campeonato camp = service.findById(1);
         assertNotNull(camp);
@@ -79,8 +100,7 @@ class CampeonatoServiceTest extends BaseTests {
     }
 
     @Test
-    @DisplayName("Deleta campeonato")
-    @Sql({ "classpath:/resources/sqls/campeonato.sql" })
+    @DisplayName("Teste deleta campeonato")
     void deleteTest() {
         assertEquals(3, service.listAll().size());
         service.delete(1);
@@ -89,17 +109,14 @@ class CampeonatoServiceTest extends BaseTests {
     }
 
     @Test
-    @DisplayName("Delete campeonato que não existe")
-    @Sql({ "classpath:/resources/sqls/campeonato.sql" })
+    @DisplayName("Teste delete campeonato que não existe")
     void deleteIdNoExistTest() {
-        assertEquals(3, service.listAll().size());
-        service.delete(10);
-        assertEquals(3, service.listAll().size());
+        var exception = assertThrows(ObjectNotFound.class, () -> service.delete(10));
+        assertEquals("Campeonato 10 não existe.", exception.getMessage());
     }
 
     @Test
     @DisplayName("Procura por ano")
-    @Sql({ "classpath:/resources/sqls/campeonato.sql" })
     void findByYearTest() {
         assertEquals(1, service.findByYear(2020).size());
         assertEquals(1, service.findByYear(2021).size());
@@ -108,28 +125,22 @@ class CampeonatoServiceTest extends BaseTests {
     }
 
     @Test
-    @DisplayName("Procura por ano entre")
-    @Sql({ "classpath:/resources/sqls/campeonato.sql" })
+    @DisplayName("Teste procura por ano entre")
     void findByYearBetweenTest() {
-        List<Campeonato> camp = service.findByYearBetween(2020, 2022);
-        List<Campeonato> resultCamp = new ArrayList<>();
-        resultCamp.add(new Campeonato(1, "Modo Turbo", 2020));
-        resultCamp.add(new Campeonato(1, "Corrida de Rolimã", 2021));
-        resultCamp.add(new Campeonato(1, "Super corrida dos 1.0", 2022));
-        assertEquals(resultCamp.size(), camp.size());
-        assertArrayEquals(camp.toArray(),resultCamp.toArray());
-    }
+            assertEquals(2, service.findByYearBetween(2021,2022).size());
+            var ex = assertThrows(ObjectNotFound.class, () ->
+            service.findByYearBetween(2009,2019));
+            assertEquals("Nenhum campeonato entre 2009 e 2019", ex.getMessage());
+        }
     
     @Test
-    @DisplayName("Procura por ano e descrição errada")
-    @Sql({"classpath:/resources/sqls/campeonato.sql"})
+    @DisplayName("Teste  procura por ano e descrição errada")
     void findByYearAndDescriptionWrongTest() {
         var exception = assertThrows(ObjectNotFound.class, () -> service.findByYearAndDescription(1990, 2005, "z"));
         assertEquals("Campeonato não encontrado.", exception.getMessage());
     }
     @Test
-    @DisplayName("Update campeonato passando ano inválido")
-    @Sql({"classpath:/resources/sqls/campeonato.sql"})
+    @DisplayName("UTeste  ppdate campeonato passando ano inválido")
     void updateInvalidYearTest() { 
         Campeonato camp = service.findById(1);
         assertNotNull(camp);
@@ -138,16 +149,30 @@ class CampeonatoServiceTest extends BaseTests {
         var campAltera = new Campeonato(1, "Modo Turbo 2", 2030);
         var exception = assertThrows(IntegrityViolation.class, () -> 
         service.update(campAltera));
-        assertEquals("Ano inválido: 2030", exception.getMessage());  
+        assertEquals("Campeonato deve estar estre os anos de 1990 e 2024", exception.getMessage());  
     }
     
     @Test
-    @DisplayName("insere com ano do campeonato nulo")
-    @Sql({"classpath:/resources/sqls/campeonato.sql"})
-    void insertChampionshipWithNullYearTest() {
+    @DisplayName("Teste insere com ano do campeonato nulo")
+    void insertCampeonatoWithNullYearTest() {
         Campeonato camp = new Campeonato(null, "insert", null);
         var exception = assertThrows(IntegrityViolation.class, () -> service.insert(camp));
-        assertEquals("Ano não pode ser nulo", exception.getMessage());
+        assertEquals("Ano não pode ser nulo.", exception.getMessage());
+    }
+    
+    @Test
+    @DisplayName("Teste buscar por ano de campeonato")
+    void findByCampeonatoYearTest() {
+        assertEquals(1, service.findByYear(2021).size());
+    }
+    
+    @Test
+    @DisplayName("Teste buscar por ano de campeonato nulo")
+    void findByCampeonatoYearNullTest() {
+        var ex = assertThrows(IntegrityViolation.class, () ->
+        service.findByYear(1990));
+        assertEquals("O campeonato deve estar ente 1990 e %s".formatted(LocalDateTime.now().plusYears(1).getYear()), ex.getMessage());
+
     }
     
 

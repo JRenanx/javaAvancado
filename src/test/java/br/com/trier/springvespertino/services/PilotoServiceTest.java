@@ -13,128 +13,165 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 
 import br.com.trier.springvespertino.BaseTests;
-import br.com.trier.springvespertino.models.Equipe;
-import br.com.trier.springvespertino.models.Pais;
 import br.com.trier.springvespertino.models.Piloto;
+import br.com.trier.springvespertino.service.EquipeService;
+import br.com.trier.springvespertino.service.PaisService;
 import br.com.trier.springvespertino.service.PilotoService;
+import br.com.trier.springvespertino.service.exception.IntegrityViolation;
 import br.com.trier.springvespertino.service.exception.ObjectNotFound;
 import jakarta.transaction.Transactional;
 
 @Transactional
+@Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:/resources/sqls/limpa_tabelas.sql")
+@Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:/resources/sqls/equipe.sql")
+@Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:/resources/sqls/pais.sql")
 @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:/resources/sqls/piloto.sql")
-public class PilotoServiceTest  extends BaseTests{
+public class PilotoServiceTest extends BaseTests {
 
     @Autowired
-    PilotoService pilotoService;
-    
-    Pais pais;
-    Equipe equipe;
-    
-    
+    PilotoService service;
+
+    @Autowired
+    PaisService paisService;
+
+    @Autowired
+    EquipeService equipeService;
+
     @Test
     @DisplayName("Teste buscar piloto por ID")
     void findByIdTest() {
-        var piloto = pilotoService.findById(1);
+        var piloto = service.findById(1);
         assertNotNull(piloto);
         assertEquals(1, piloto.getId());
-        assertEquals("Rubinho", piloto.getName());
+        assertEquals("Renan", piloto.getName());
 
     }
-    
+
     @Test
-    @DisplayName("Teste buscar por ID inexistente")
-    void findIdInvalidTest() {
-        var exception = assertThrows(ObjectNotFound.class, () -> pilotoService.findById(10));
+    @DisplayName("Teste buscar piloto por ID inexistente")
+    void findByIdNonExistsTest() {
+        var exception = assertThrows(ObjectNotFound.class, () -> service.findById(10));
         assertEquals("Piloto 10 nao encontrado.", exception.getMessage());
     }
-    
-    @Test
-    @DisplayName("Teste buscar todos")
-    void listAllTest() {
-        List<Piloto> lista = pilotoService.listAll();
-        assertEquals(3, lista.size());
-    }
-    
-    @Test
-    @DisplayName("Teste listar todos sem possuir usuários cadastrados")
-    void listAllUsersEmptyTest() {
-        var exception = assertThrows(ObjectNotFound.class, () -> pilotoService.listAll());
-        assertEquals("Nenhum piloto cadastrado.", exception.getMessage());
-    }
-    
+
     @Test
     @DisplayName("Teste inserir piloto")
     void insertPilotoTest() {
-        Piloto piloto = new Piloto (null, "insert", pais, equipe);
-        pilotoService.insert(piloto);
-        piloto = pilotoService.findById(1);
+        Piloto piloto = new Piloto(3, "Piloto Teste", paisService.findById(1), equipeService.findById(1));
+        service.insert(piloto);
+        assertEquals(3, service.listAll().size());
+        assertEquals(3, piloto.getId());
+        assertEquals("Piloto Teste", piloto.getName());
+    }
+
+    @Test
+    @DisplayName("Teste inserir piloto nulo")
+    void insertNullPilotoTest() {
+        Piloto piloto = new Piloto(1, null, null, equipeService.findById(1));
+        var exception = assertThrows(IntegrityViolation.class, () -> service.insert(piloto));
+        assertEquals("Piloto nulo", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Teste  update piloto")
+    void updateTest() {
+        Piloto piloto = service.findById(1);
+        assertNotNull(piloto);
         assertEquals(1, piloto.getId());
-        assertEquals("insert", piloto.getName());
+        assertEquals("Renan", piloto.getName());
+        piloto = new Piloto(1, "Updated Pilot", paisService.findById(1), equipeService.findById(1));
+        service.update(piloto);
+        assertEquals(3, service.listAll().size());
+        assertEquals(1, piloto.getId());
+        assertEquals("Updated Pilot", piloto.getName());
     }
-    
+
     @Test
-    @DisplayName("Teste alterar piloto")
-    void updatePilotoTest() {
-        var piloto = pilotoService.findById(1);
-        assertEquals("Rubinho", piloto.getName());
-        var pilotoAltera = new Piloto(1, "altera", pais, equipe);
-        pilotoService.update(pilotoAltera);
-        piloto = pilotoService.findById(1);
-        assertEquals("altera", piloto.getName());
-    }
-    
-    @Test
-    @DisplayName("Update piloto não existente")
+    @DisplayName("Teste  update piloto não existente")
     void updateInvalid() {
-        Piloto piloto = new Piloto(10, " Piloto Novo",pais, equipe );
-        var ex = assertThrows(ObjectNotFound.class, () -> pilotoService.update(piloto));
+        Piloto piloto = new Piloto(10, "Invalid Pilot", paisService.findById(1), equipeService.findById(1));
+        var ex = assertThrows(ObjectNotFound.class, () -> service.update(piloto));
         assertEquals("Piloto 10 nao encontrado.", ex.getMessage());
     }
 
-    
     @Test
-    @DisplayName("Teste remover piloto")
+    @DisplayName("Teste Remover piloto")
     void removePilotoTest() {
-        pilotoService.delete(1);
-        List<Piloto> lista = pilotoService.listAll();
+        service.delete(1);
+        List<Piloto> lista = service.listAll();
         assertEquals(2, lista.size());
         assertEquals(2, lista.get(0).getId());
     }
-    
-      
-    @Test
-    @DisplayName("Teste buscar piloto por nome")
-    void findByNameTest() {
-        var piloto = pilotoService.findByNameStartsWithIgnoreCase("Ru");
-        assertNotNull(piloto);
-        assertEquals(1, piloto.size());
-        var piloto2 = pilotoService.findByNameStartsWithIgnoreCase("Massa");
-        assertEquals(1, piloto2.size());
-    }
-    
-    @Test
-    @DisplayName("Teste buscar piloto por nome errado")
-    void findByNameInvalidTest() {
-        var exception = assertThrows(ObjectNotFound.class, () -> pilotoService.findByNameStartsWithIgnoreCase("w"));
-        assertEquals("Nenhum piloto com esse nome.", exception.getMessage());
 
-    }
-    
     @Test
-    @DisplayName("Teste buscar piloto por nome")
-    void findByNameContainsTest() {
-        var piloto = pilotoService.findByNameContainingIgnoreCase("Ru");
-        assertNotNull(piloto);
-        assertEquals(1, piloto.size());
-    }
-    
-    @Test
-    @Sql({ "classpath:/resources/sqls/piloto.sql" })
-    void findByNameContaisInvalidTest() {
-        var exception = assertThrows(ObjectNotFound.class, () -> pilotoService.findByNameContainingIgnoreCase("wi"));
-        assertEquals("Nenhum piloto com esse nome.", exception.getMessage());
-
+    @DisplayName("Teste remover piloto inexistente")
+    void removePilotoNonExistsTest() {
+        var exception = assertThrows(ObjectNotFound.class, () -> service.delete(10));
+        assertEquals("Piloto 10 nao encontrado.", exception.getMessage());
     }
 
+    @Test
+    @DisplayName("Teste listar todos pilotos")
+    void listAllPilotosTest() {
+        assertEquals(3, service.listAll().size());
+    }
+
+    @Test
+    @DisplayName("Teste listar todos sem nenhum cadastro")
+    void listAllNoPilotoTest() {
+        List<Piloto> lista = service.listAll();
+        assertEquals(3, lista.size());
+        service.delete(1);
+        service.delete(2);
+        service.delete(3);
+        var exception = assertThrows(ObjectNotFound.class, () -> service.listAll());
+        assertEquals("Nenhum piloto cadastrado.", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Teste encontra pilotos por nome")
+    void findByNameStartsWithIgnoreCase() {
+        List<Piloto> lista = service.findByNameStartsWithIgnoreCase("R");
+        assertEquals(2, lista.size());
+    }
+
+    @Test
+    @DisplayName("Teste encontra pilotos por nome sem nomes iguais")
+    void findByNameStartsWithIgnoreCaseInvalid() {
+        var ex = assertThrows(ObjectNotFound.class, () -> service.findByNameStartsWithIgnoreCase("Z"));
+        assertEquals("Nenhum piloto com esse nome.", ex.getMessage());
+    }
+
+    @Test
+    @DisplayName("Encontra pilotos por país")
+    void findByPaisOrderByName() {
+        List<Piloto> lista = service.findByPaisOrderByName(paisService.findById(1));
+        assertEquals(1, lista.size());
+    }
+
+    @Test
+    @DisplayName("Encontra pilotos por país sem nenhum com este país")
+    @Sql({ "classpath:/resources/sqls/limpa_tabelas.sql" })
+    @Sql({ "classpath:/resources/sqls/pais.sql" })
+    void findByCountryOrderByNameInvalid() {
+        var ex = assertThrows(ObjectNotFound.class, () -> service.findByPaisOrderByName(paisService.findById(1)));
+        assertEquals("Nenhum piloto cadastrado no país: Brasil", ex.getMessage());
+    }
+
+    @Test
+    @DisplayName("Teste ncontra pilotos por time")
+    void findByEquipeOrderByName() {
+        List<Piloto> lista = service.findByEquipeOrderByName(equipeService.findById(1));
+        assertEquals(1, lista.size());
+    }
+
+    @Test
+    @DisplayName("Encontra pilotos por time sem times encontrados")
+    @Sql({ "classpath:/resources/sqls/limpa_tabelas.sql" })
+    @Sql({ "classpath:/resources/sqls/equipe.sql" })
+    void findByEquipeOrderByNameInvalid() {
+        var ex = assertThrows(ObjectNotFound.class, () -> service.findByEquipeOrderByName(equipeService.findById(1)));
+        assertEquals("Nenhum piloto cadastrado na equipe : Willians", ex.getMessage());
+    }
 
 }
