@@ -80,7 +80,7 @@ class CampeonatoServiceTest extends BaseTests {
     void insertCampeonatoInvalidYearTest() {
         Campeonato camp = new Campeonato (null, "insert", 1985);
         var exception = assertThrows(IntegrityViolation.class, () -> service.insert(camp));
-        assertEquals("Ano inválido.", exception.getMessage()); 
+        assertEquals("Campeonato deve estar estre os anos de 1990 e 2024.", exception.getMessage()); 
     }
     
     

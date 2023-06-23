@@ -171,7 +171,7 @@ public class PilotoServiceTest extends BaseTests {
     @Sql({ "classpath:/resources/sqls/equipe.sql" })
     void findByEquipeOrderByNameInvalid() {
         var ex = assertThrows(ObjectNotFound.class, () -> service.findByEquipeOrderByName(equipeService.findById(1)));
-        assertEquals("Nenhum piloto cadastrado na equipe : Willians", ex.getMessage());
+        assertEquals("Nenhum piloto cadastrado na equipe: Willians", ex.getMessage());
     }
 
 }

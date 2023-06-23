@@ -10,11 +10,11 @@ import br.com.trier.springvespertino.models.Piloto;
 import br.com.trier.springvespertino.models.PilotoCorrida;
 
 @Repository
-public interface PilotoCorridaRepository extends JpaRepository<PilotoCorrida, Integer> {
-    List<PilotoCorrida> findByPlacement(Integer colocacao);
+public interface PilotoCorridaRepository extends JpaRepository<PilotoCorrida, Integer>{
 
-    List<PilotoCorrida> findByPilotoOrderByColocacao(Piloto piloto);
-
-    List<PilotoCorrida> findByCorridaOrderByColocacao(Corrida Corrida);
-
+    List<PilotoCorrida> findByPilotoOrderByPosition(Piloto piloto);
+    
+    List<PilotoCorrida> findByCorridaOrderByPosition(Corrida corrida);
+    
+    List<PilotoCorrida> findByPosition(Integer placing);
 }

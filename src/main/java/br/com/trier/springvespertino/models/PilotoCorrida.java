@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -15,8 +16,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 @Entity(name = "piloto_corrida")
 public class PilotoCorrida {
@@ -27,21 +28,24 @@ public class PilotoCorrida {
     @Column(name = "id_piloto_corrida")
     private Integer id;
 
-    @Column(name = "id_colocacao")
-    private Integer colocacao;
-
     @ManyToOne
+    @NotNull
     private Piloto piloto;
 
     @ManyToOne
+    @NotNull
     private Corrida corrida;
 
-    public PilotoCorrida(PilotoCorridaDTO pilotoCorridaDTO, Piloto piloto, Corrida corrida) {
-        this(pilotoCorridaDTO.getId(), pilotoCorridaDTO.getColocacao(), piloto, corrida);
+    @Column(name = "posicao_piloto")
+    private Integer position;
+
+    public PilotoCorrida(PilotoCorridaDTO racePilotDTO, Piloto piloto, Corrida corrida) {
+        this(racePilotDTO.getId(), piloto, corrida, racePilotDTO.getPosition());
     }
 
     public PilotoCorridaDTO toDTO() {
-        return new PilotoCorridaDTO(id, colocacao, piloto.getId(), piloto.getName(), corrida.getId(),
-                DataUtils.zoneDateToBrDate(corrida.getDate()));
+        return new PilotoCorridaDTO(id, piloto.getId(), piloto.getName(), corrida.getId(),
+                DataUtils.zoneDateToBrDate(corrida.getDate()), position);
     }
+
 }
