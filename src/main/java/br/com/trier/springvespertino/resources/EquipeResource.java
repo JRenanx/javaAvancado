@@ -18,7 +18,7 @@ import br.com.trier.springvespertino.models.dto.EquipeDTO;
 import br.com.trier.springvespertino.service.EquipeService;
 
 @RestController
-@RequestMapping("/equipe")
+@RequestMapping("/equipes")
 public class EquipeResource {
 
     @Autowired

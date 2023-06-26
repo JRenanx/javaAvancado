@@ -20,8 +20,8 @@ public class CampeonatoServiceImpl implements CampeonatoService {
     @Autowired
     private CampeonatoRepository repository;
        
-    private void validYear (Integer year) {
-        if (year== null) {
+    private void validateYear (Integer year) {
+        if (year == null) {
             throw new IntegrityViolation("Ano não pode ser nulo.");
         }
         if (year < 1990 || year> LocalDateTime.now().plusYears(1).getYear()) {
@@ -37,7 +37,7 @@ public class CampeonatoServiceImpl implements CampeonatoService {
     @Override
     public List<Campeonato> findByYear(Integer year) {
         List<Campeonato> lista = repository.findByYear(year);
-        validYear(year);
+        validateYear(year);
         if(lista.isEmpty()) {
             throw new ObjectNotFound("Nenhum campeonato em %s".formatted(year));
         }
@@ -46,7 +46,7 @@ public class CampeonatoServiceImpl implements CampeonatoService {
 
     @Override
     public Campeonato insert(Campeonato campeonato) {
-        validYear(campeonato.getYear());
+        validateYear(campeonato.getYear());
         return repository.save(campeonato);
     }
 
@@ -72,7 +72,7 @@ public class CampeonatoServiceImpl implements CampeonatoService {
     
     @Override
     public Campeonato update(Campeonato campeonato) {
-        validYear(campeonato.getYear());
+        validateYear(campeonato.getYear());
         findById(campeonato.getId());
         return repository.save(campeonato);
     }

@@ -18,7 +18,7 @@ import br.com.trier.springvespertino.models.dto.PaisDTO;
 import br.com.trier.springvespertino.service.PaisService;
 
 @RestController
-@RequestMapping("/pais")
+@RequestMapping("/paises")
 public class PaisResouce {
 
     @Autowired

@@ -23,6 +23,8 @@ class UserServiceTest extends BaseTests {
     
     @Autowired
     UserService userService;
+    
+    
 
     @Test
     @DisplayName("Teste buscar usuário por ID")
@@ -55,7 +57,7 @@ class UserServiceTest extends BaseTests {
     @Test
     @DisplayName("Teste inserir usuário")
     void insertUserTest() {
-        User usuario = new User(null, "insert", "insert", "insert");
+        User usuario = new User(null, "insert", "insert", "insert", "ADMIN");
         userService.insert(usuario);
         usuario = userService.findById(1);
         assertEquals(1, usuario.getId());
@@ -95,7 +97,7 @@ class UserServiceTest extends BaseTests {
     void updateUsersTest() {
         var usuario = userService.findById(1);
         assertEquals("User 1", usuario.getName());
-        var usuarioAltera = new User(1, "altera", "altera", "altera");
+        var usuarioAltera = new User(1, "altera", "altera", "altera", "ADMIN");
         userService.update(usuarioAltera);
         usuario = userService.findById(1);
         assertEquals("altera", usuario.getName());
@@ -104,7 +106,7 @@ class UserServiceTest extends BaseTests {
     @Test
     @DisplayName("Teste alterar usuário inexistente")
     void updateUsersNonExistsTest() {
-        User user = new User(1, "User80", "User80", "123");
+        User user = new User(1, "User80", "User80", "123", "ADMIN");
         var ex = assertThrows(ObjectNotFound.class, () -> userService.update(user));
         assertEquals("O usuário 1 não existe", ex.getMessage());
 
@@ -114,7 +116,7 @@ class UserServiceTest extends BaseTests {
     @DisplayName("Teste inserir usuário com email duplicado")
     @Sql({ "classpath:/resources/sqls/usuario.sql" })
     void insertEmailDuplicatedTest() {
-        User user = new User(null, "User80", "email1@gmail.com", "123");
+        User user = new User(null, "User80", "email1@gmail.com", "123","ADMIN");
         var exception = assertThrows(IntegrityViolation.class, () -> userService.insert(user));
         assertEquals("Email já existente: email1@gmail.com", exception.getMessage());
     }
@@ -123,7 +125,7 @@ class UserServiceTest extends BaseTests {
     @DisplayName("Test altera usuario com email duplicado")
     @Sql({ "classpath:/resources/sqls/usuario.sql" })
     void updateEmailDuplicatedTest() {
-        User user = new User(2, "User2", "email1@gmail.com", "123");
+        User user = new User(2, "User2", "email1@gmail.com", "123", "ADMIN");
         var exception = assertThrows(IntegrityViolation.class, () -> userService.update(user));
         assertEquals("Email já existente: email1@gmail.com", exception.getMessage());
 

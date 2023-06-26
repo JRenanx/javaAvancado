@@ -81,7 +81,7 @@ public class CorridaServiceImpl implements CorridaService{
         if (lista.isEmpty()) {
             throw new ObjectNotFound("Nenhuma corrida cadastrada na pista: %s".formatted(pista.getName()));
         }
-        return lista;
+        return lista; 
 	}
 
 	@Override
