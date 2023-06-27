@@ -1,4 +1,4 @@
-delete from usuario where id_usuario > 0;
+delete from usuario;
 
 delete from equipe where id_equipe > 0;
 

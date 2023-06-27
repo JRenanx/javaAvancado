@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import br.com.trier.springvespertino.models.Campeonato;
 
 @Repository
-public interface CampeonatoRepository  extends JpaRepository<Campeonato, Integer>{
+public interface CampeonatoRepository extends JpaRepository<Campeonato, Integer>{
 
     List<Campeonato> findByYear(Integer year);
     

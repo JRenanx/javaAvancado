@@ -8,14 +8,14 @@ public interface EquipeService {
 
     Equipe findById(Integer id);
 
-    List<Equipe> listAll();
-
-    List<Equipe> findByNameStartsWithIgnoreCase(String name);
-
     Equipe insert(Equipe equipe);
 
     Equipe update(Equipe equipe);
 
     void delete(Integer id);
+    
+    List<Equipe> listAll();
+
+    List<Equipe> findByNameStartsWithIgnoreCase(String name);
 
 }

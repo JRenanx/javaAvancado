@@ -25,39 +25,42 @@ public class UserResource {
     @Autowired
     private UserService service;
 
-    @Secured({"ROLE_ADMIN"})
+    @Secured({ "ROLE_ADMIN" })
     @PostMapping
     public ResponseEntity<UserDTO> insert(@RequestBody UserDTO user) {
         return ResponseEntity.ok(service.insert(new User(user)).toDTO());
     }
-    
-    @Secured({"ROLE_USER"})
+
+    @Secured({ "ROLE_USER" })
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> findById(@PathVariable Integer id){
+    public ResponseEntity<UserDTO> findById(@PathVariable Integer id) {
         return ResponseEntity.ok(service.findById(id).toDTO());
     }
-    
-    @Secured({"ROLE_USER"})
+
+    @Secured({ "ROLE_USER" })
     @GetMapping
     public ResponseEntity<List<UserDTO>> listAll() {
         return ResponseEntity.ok(service.listAll().stream().map((user) -> user.toDTO()).toList());
     }
-    @Secured({"ROLE_USER"})
+
+    @Secured({ "ROLE_USER" })
     @GetMapping("/name/{name}")
     public ResponseEntity<List<UserDTO>> findByNameStartsWithIgnoreCase(@PathVariable String name) {
-        return ResponseEntity.ok(service.findByNameStartsWithIgnoreCase(name).stream().map((user) -> user.toDTO()).toList());
+        return ResponseEntity
+                .ok(service.findByNameStartsWithIgnoreCase(name).stream().map((user) -> user.toDTO()).toList());
     }
-    @Secured({"ROLE_ADMIN"})
+
+    @Secured({ "ROLE_ADMIN" })
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> update(@PathVariable Integer id, @RequestBody UserDTO userDTO){
+    public ResponseEntity<UserDTO> update(@PathVariable Integer id, @RequestBody UserDTO userDTO) {
         User user = new User(userDTO);
         user.setId(id);
         return ResponseEntity.ok(service.update(user).toDTO());
     }
-    
-    @Secured({"ROLE_ADMIN"})
+
+    @Secured({ "ROLE_ADMIN" })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id){
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
         findById(id);
         service.delete(id);
         return ResponseEntity.ok().build();
