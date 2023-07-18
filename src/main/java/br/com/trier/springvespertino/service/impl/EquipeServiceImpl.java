@@ -4,13 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import br.com.trier.springvespertino.models.Equipe;
 import br.com.trier.springvespertino.repositories.EquipeRepository;
 import br.com.trier.springvespertino.service.EquipeService;
 
-@Repository
+@Service
 public class EquipeServiceImpl implements EquipeService {
 
     @Autowired
@@ -23,18 +23,8 @@ public class EquipeServiceImpl implements EquipeService {
     }
 
     @Override
-    public List<Equipe> findByNameStartsWithIgnoreCase(String name) {
-        return repository.findByNameStartsWithIgnoreCase(name);
-    }
-    
-    @Override
     public Equipe insert(Equipe equipe) {
         return repository.save(equipe);
-    }
-
-    @Override
-    public List<Equipe> listAll() {
-        return repository.findAll();
     }
 
     @Override
@@ -50,6 +40,14 @@ public class EquipeServiceImpl implements EquipeService {
         }
     }
 
+    @Override
+    public List<Equipe> listAll() {
+        return repository.findAll();
+    }
 
+    @Override
+    public List<Equipe> findByNameStartsWithIgnoreCase(String name) {
+        return repository.findByNameStartsWithIgnoreCase(name);
+    }
 
 }

@@ -1,11 +1,9 @@
 package br.com.trier.springvespertino.service;
 
-import java.util.Collection;
 import java.util.List;
 
 import br.com.trier.springvespertino.models.Pais;
 import br.com.trier.springvespertino.models.Pista;
-import br.com.trier.springvespertino.models.dto.CorridaDTO;
 
 public interface PistaService {
 
