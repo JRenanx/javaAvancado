@@ -1,7 +1,5 @@
 package br.com.trier.springvespertino.models.dto;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,11 +7,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class CorridaPaisAnoDTO {
+public class CountryDTO {
 
-    
-    private Integer year;
-    private String pais;
-    private Integer corridaSize;
-    private List<RaceDTO> corridas;
+    private Integer id;
+    private String name;
 }

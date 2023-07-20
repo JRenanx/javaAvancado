@@ -16,25 +16,25 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode (of = "id")
-@Entity(name="usuario")
+@Entity(name="user_race")
 public class User {
 
     @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_usuario")
+    @Column(name = "id_user")
     private Integer id;
     
-    @Column(name = "nome_usuario")
+    @Column(name = "name_user")
     private String name;
     
-    @Column(name = "email_usuario", unique = true)
+    @Column(name = "email_user", unique = true)
     private String email;
     
-    @Column(name = "senha_usuario")
+    @Column(name = "password_user")
     private String password;
     
-    @Column(name = "permissoes_usuario")
+    @Column(name = "roles_user")
     private String roles;
     
     public User(UserDTO dto) {

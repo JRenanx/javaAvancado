@@ -1,4 +1,4 @@
 
-INSERT INTO equipe (id_equipe ,nome_equipe) VALUES(1,'Willians');
-INSERT INTO equipe (id_equipe ,nome_equipe) VALUES(2,'Ferrari');
-INSERT INTO equipe (id_equipe ,nome_equipe) VALUES(3,'RedBull');
+INSERT INTO team (id_team, name_team) VALUES(1,'Willians');
+INSERT INTO team (id_team, name_team) VALUES(2,'Ferrari');
+INSERT INTO team (id_team, name_team) VALUES(3,'RedBull');

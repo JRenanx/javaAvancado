@@ -10,12 +10,12 @@ public interface UserService {
 
     User insert(User user);
 
-    List<User> listAll();
-
     User update(User user);
 
     void delete(Integer id);
-    
+
+    List<User> listAll();
+
     List<User> findByNameStartsWithIgnoreCase(String name);
 
 }
